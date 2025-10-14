@@ -20,7 +20,7 @@ static UBlackboardComponent* GetBB(AAIController* AIC)
     return AIC ? AIC->GetBlackboardComponent() : nullptr;
 }
 // 유틸 함수
-static bool ProjectToNav(UWorld* World, const FVector& In, FVector& Out)
+/*static bool ProjectToNav(UWorld* World, const FVector& In, FVector& Out)
 {
     if (UNavigationSystemV1* Nav = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World))
     {
@@ -33,7 +33,7 @@ static bool ProjectToNav(UWorld* World, const FVector& In, FVector& Out)
     }
     Out = In;
     return false;
-}
+}*/
 
 ACHREnemy::ACHREnemy()
 {
@@ -456,7 +456,18 @@ void ACHREnemy::RefreshPatrolTargetOnBB()
             if (PatrolMode == EPatrolMode::LinePatrol)
             {
                 FVector Target = GetCurrentLineTarget();
-                ProjectToNav(GetWorld(), Target, Target);   //  보정
+                //ProjectToNav(GetWorld(), Target, Target);   //  보정
+
+                 // ★ NavMesh 위로 흡착 (ProjectToNav 대체)
+                if (UNavigationSystemV1* Nav = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld()))
+                {
+                    FNavLocation NL;
+                    if (Nav->ProjectPointToNavigation(Target, NL, FVector(200.f, 200.f, 400.f)))
+                    {
+                        Target = NL.Location;
+                    }
+                }
+
                 BB->SetValueAsVector(EnemyBB::PatrolTarget, Target);
                 //BB->SetValueAsVector(EnemyBB::PatrolTarget, GetCurrentLineTarget());
             }
@@ -498,7 +509,17 @@ void ACHREnemy::ToggleLinePatrolDirection()
             if (static_cast<uint8>(PatrolMode) == static_cast<uint8>(EPatrolMode::LinePatrol))
             {
                 FVector Target = GetCurrentLineTarget();
-                ProjectToNav(GetWorld(), Target, Target);   // 보정
+                //ProjectToNav(GetWorld(), Target, Target);   // 보정
+                 // ★ NavMesh 위로 흡착 (ProjectToNav 대체)
+                if (UNavigationSystemV1* Nav = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld()))
+                {
+                    FNavLocation NL;
+                    if (Nav->ProjectPointToNavigation(Target, NL, FVector(200.f, 200.f, 400.f)))
+                    {
+                        Target = NL.Location;
+                    }
+                }
+
                 BB->SetValueAsVector(EnemyBB::PatrolTarget, Target);
             }
             //BB->SetValueAsVector(EnemyBB::PatrolTarget, GetCurrentLineTarget());

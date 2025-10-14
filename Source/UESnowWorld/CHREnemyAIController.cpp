@@ -7,6 +7,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationSystem.h"
+#include "AI/Navigation/NavigationTypes.h" // FNavLocation (보통 NavigationSystem.h만으로도 됨)
 
 ACHREnemyAIController::ACHREnemyAIController()
 {
@@ -77,7 +78,15 @@ void ACHREnemyAIController::OnPossess(APawn* InPawn)
                 + Enemy->GetActorForwardVector().GetSafeNormal()
                 * Enemy->LinePatrolDistance;
 
-            ProjectToNav(GetWorld(), Target, Target);
+           // ProjectToNav(GetWorld(), Target, Target);
+            if (UNavigationSystemV1* Nav = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld()))
+            {
+                FNavLocation NL;
+                if (Nav->ProjectPointToNavigation(Target, NL, FVector(200.f, 200.f, 400.f)))
+                {
+                    Target = NL.Location;
+                }
+            }
             BB->SetValueAsVector(EnemyBB::PatrolTarget, Target);
         }
         else if (Enemy && Enemy->PatrolMode == EPatrolMode::Patrol)
