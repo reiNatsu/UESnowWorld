@@ -1,0 +1,20 @@
+[
+	{
+		"Name": "1004",
+		"MissionID": 1004,
+		"MissionType": "KillMonster",
+		"TargetCount": 10,
+		"Description": "몬스터 10마리 처치",
+		"CheckType": "OnMonsterDead",
+		"Param": "MonsterBase"
+	},
+	{
+		"Name": "2001",
+		"MissionID": 2001,
+		"MissionType": "ActivateGenerator",
+		"TargetCount": 4,
+		"Description": "발전기 4대 가동",
+		"CheckType": "OnGeneratorCompleted",
+		"Param": "BP_Generator"
+	}
+]

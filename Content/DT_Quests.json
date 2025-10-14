@@ -1,0 +1,32 @@
+[
+  {
+    "Name": "TUT_Intro",
+    "QuestId": "TUT_Intro",
+    "Type": "Linear",
+    "Title": "튜토리얼",
+    "Description": "기본 조작 배우기",
+    "RoundId": 0,
+    "bAutoStart": true,
+    "NextQuestId": "TUT_GetWeapon"
+  },
+  {
+    "Name": "TUT_GetWeapon",
+    "QuestId": "TUT_GetWeapon",
+    "Type": "Linear",
+    "Title": "무기 획득",
+    "Description": "무기를 찾아 장착",
+    "RoundId": 0,
+    "bAutoStart": false,
+    "NextQuestId": ""
+  },
+  {
+    "Name": "ROUND_1",
+    "QuestId": "ROUND_1",
+    "Type": "Checklist",
+    "Title": "라운드1 미션",
+    "Description": "아래 항목 아무 순서나 달성",
+    "RoundId": 1,
+    "bAutoStart": false,
+    "NextQuestId": ""
+  }
+]

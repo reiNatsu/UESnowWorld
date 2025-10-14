@@ -1,0 +1,79 @@
+[
+  {
+    "Name": "TUT_Intro_00",
+    "QuestId": "TUT_Intro",
+    "StepIndex": 0,
+    "GroupId": 0,
+    "ObjectiveId": "Talk_ElderNPC",
+    "Type": "TalkToNPC",
+    "TargetKey": "ELDER_NPC",
+    "TargetCount": 1,
+    "bOptional": false
+  },
+  {
+    "Name": "TUT_Intro_01",
+    "QuestId": "TUT_Intro",
+    "StepIndex": 1,
+    "GroupId": 0,
+    "ObjectiveId": "Reach_WeaponRoom",
+    "Type": "ReachLocation",
+    "TargetKey": "WEAPON_ROOM",
+    "TargetCount": 1,
+    "bOptional": false
+  },
+  {
+    "Name": "TUT_GetWeapon_00",
+    "QuestId": "TUT_GetWeapon",
+    "StepIndex": 0,
+    "GroupId": 0,
+    "ObjectiveId": "Pick_Sword",
+    "Type": "AcquireItem",
+    "TargetKey": "SWORD_001",
+    "TargetCount": 1,
+    "bOptional": false
+  },
+  {
+    "Name": "TUT_GetWeapon_01",
+    "QuestId": "TUT_GetWeapon",
+    "StepIndex": 1,
+    "GroupId": 0,
+    "ObjectiveId": "Equip_Sword",
+    "Type": "InteractActor",
+    "TargetKey": "EQUIP_MENU",
+    "TargetCount": 1,
+    "bOptional": false
+  },
+  {
+    "Name": "ROUND1_00",
+    "QuestId": "ROUND_1",
+    "StepIndex": 0,
+    "GroupId": 1,
+    "ObjectiveId": "Kill_Spider_3",
+    "Type": "KillEnemy",
+    "TargetKey": "SPIDER",
+    "TargetCount": 3,
+    "bOptional": false
+  },
+  {
+    "Name": "ROUND1_01",
+    "QuestId": "ROUND_1",
+    "StepIndex": 0,
+    "GroupId": 1,
+    "ObjectiveId": "Collect_Gems_5",
+    "Type": "AcquireItem",
+    "TargetKey": "GEM",
+    "TargetCount": 5,
+    "bOptional": false
+  },
+  {
+    "Name": "ROUND1_02",
+    "QuestId": "ROUND_1",
+    "StepIndex": 0,
+    "GroupId": 1,
+    "ObjectiveId": "Talk_Scout",
+    "Type": "TalkToNPC",
+    "TargetKey": "SCOUT_NPC",
+    "TargetCount": 1,
+    "bOptional": true
+  }
+]

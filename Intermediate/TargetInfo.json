@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "UESnowWorld",
+			"Path": "..\\Source\\UESnowWorld.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "UESnowWorldEditor",
+			"Path": "..\\Source\\UESnowWorldEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

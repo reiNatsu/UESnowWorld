@@ -1,0 +1,8 @@
+{
+	"SourceFiles": [
+		"C:\\UESnowWorld\\Source\\UESnowWorld\\UESnowWorld.Build.cs",
+		"C:\\UESnowWorld\\Source\\UESnowWorld.Target.cs",
+		"C:\\UESnowWorld\\Source\\UESnowWorldEditor.Target.cs"
+	],
+	"EngineVersion": "5.5.4"
+}
