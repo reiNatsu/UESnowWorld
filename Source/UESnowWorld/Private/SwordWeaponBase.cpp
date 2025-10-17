@@ -2,7 +2,7 @@
 
 
 #include "SwordWeaponBase.h"
-#include "UESnowWorld/CHRPlayer.h"
+#include "CHRPlayer.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
 

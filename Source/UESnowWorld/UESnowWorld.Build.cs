@@ -14,7 +14,8 @@ public class UESnowWorld : ModuleRules
 			"InputCore", "EnhancedInput",
         "AIModule",
         "NavigationSystem",
-         "GameplayAbilities", "GameplayTags", "GameplayTasks"});
+         "GameplayAbilities", "GameplayTags", "GameplayTasks"
+        , "UMG" });
 	}
     //"GameplayAbilities", "GameplayTags",
 }

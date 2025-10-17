@@ -2,7 +2,7 @@
 
 
 #include "AN_CombatResset.h"
-#include "UESnowWorld/CHRPlayer.h"
+#include "CHRPlayer.h"
 
 void UAN_CombatResset::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
