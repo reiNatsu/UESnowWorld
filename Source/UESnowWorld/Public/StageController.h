@@ -14,6 +14,9 @@ class ACharacter;
 class UButton;
 class AMissionManager;
 
+class ACHRBoss;
+class UDataTable;
+
 UCLASS(Blueprintable)
 class UESNOWWORLD_API AStageController : public AActor
 {
@@ -46,6 +49,28 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stage|Rule")
     bool bAutoClearWhenAllMissionsCompleted = false;
 
+    // =========== 보스 몬스터 스폰 관련 ======================
+       // 스폰 포인트들(레벨에 배치된 TargetPoint들을 드래그/등록)
+    UPROPERTY(EditAnywhere, Category = "Stage")
+    TArray<AActor*> BossSpawnPoints;
+
+    // 이번 판에 사용할 “보스 클래스 후보”(BP_CHRBossBase 자식 BP들)
+    UPROPERTY(EditAnywhere, Category = "Stage")
+    TArray<TSubclassOf<ACHRBoss>> BossClassCandidates;
+
+    // 이번 판에 확정된 보스(처음에 랜덤 1종 선택 → 리스폰도 동일한 클래스 유지)
+    UPROPERTY(VisibleAnywhere, Category = "Stage")
+    TSubclassOf<ACHRBoss> ChosenBossClass;
+
+    // 보스 리스폰 딜레이
+    UPROPERTY(EditAnywhere, Category = "Stage")
+    float RespawnDelay = 8.f;
+
+    // “발전기 4개 수리” 미션 신호(확실하지 않음: 외부 시스템에서 호출)
+    UFUNCTION(BlueprintCallable)
+    void NotifyGeneratorFixedCountChanged(int32 FixedCount);
+
+
 protected:
     virtual void BeginPlay() override;
 
@@ -73,4 +98,14 @@ private:
 
     UFUNCTION()
     void OnAllMissionsCompleted();
+
+    // =========== 보스 몬스터 스폰 관련 ======================
+    UPROPERTY()
+    ACHRBoss* CurrentBoss = nullptr;
+
+    void SpawnBossAtRandomPoint();
+    void HandleBossDied(); // 델리게이트 바인딩
+
+    // 버서크 트리거 플래그
+    bool bBerserkTriggered = false;
 };

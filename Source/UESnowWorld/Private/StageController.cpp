@@ -3,6 +3,7 @@
 
 #include "StageController.h"
 
+#include "CHRBoss.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
 #include "GameFramework/Character.h"
@@ -25,13 +26,38 @@ AStageController::AStageController()
 
 }
 
+// 발전기 4개 수리 확인
+void AStageController::NotifyGeneratorFixedCountChanged(int32 FixedCount)
+{
+    // “4개 수리하기” 미션에서 3개 완료 → 보스 버서크
+    if (!bBerserkTriggered && FixedCount >= 3)
+    {
+        bBerserkTriggered = true;
+        if (CurrentBoss)
+        {
+            CurrentBoss->EnterBerserkMode();
+        }
+    }
+}
+
 // Called when the game starts or when spawned
 void AStageController::BeginPlay()
 {
 	Super::BeginPlay();
 
-    // 시작 표시
-    //UKismetSystemLibrary::PrintString(this, TEXT("[SC] BeginPlay"), true, true, FLinearColor::Yellow, 2.f);
+    // 보스 클래스 확정
+    if (BossClassCandidates.Num() > 0)
+    {
+        const int32 Index = FMath::RandRange(0, BossClassCandidates.Num() - 1);
+        ChosenBossClass = BossClassCandidates[Index];
+    }
+    else
+    {
+        UE_LOG(LogTemp, Error, TEXT("StageController: BossClassCandidates is empty!"));
+        return;
+    }
+  
+    SpawnBossAtRandomPoint();
 
     // 로컬 플레이어 컨트롤러 확보
     APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
@@ -50,39 +76,8 @@ void AStageController::BeginPlay()
             MissionPanel->AddToViewport(10);          // z-order
             MissionPanel->SetPanelWidthFraction(0.3333f); // 화면의 1/3 폭
 
-            //// 매니저 참조 없으면 월드에서 1개 찾아 연결
-            //AMissionManager* MM = MissionManagerRef;
-            //if (!MM)
-            //{
-            //    for (TActorIterator<AMissionManager> It(GetWorld()); It; ++It) { MM = *It; break; }
-            //}
-            //if (MM)
-            //{
-            //    UKismetSystemLibrary::PrintString(
-            //        this,
-            //        FString::Printf(TEXT("[SC] Found MissionManager: %s"), *GetNameSafe(MM)), // ← 여기!
-            //        true, true, FLinearColor::Yellow, 2.f);
-
-            //    UKismetSystemLibrary::PrintString(
-            //        this,
-            //        FString::Printf(TEXT("[SC] ActiveMissions Num = %d"), MM->ActiveMissions.Num()),
-            //        true, true, FLinearColor::Blue, 2.f);
-
-
-            //    MissionPanel->InitializeWithManager(MM);
-            //}
-            //else
-            //{
-            //
-            //    UKismetSystemLibrary::PrintString(this, TEXT("[SC] MissionManager NOT FOUND"), true, true, FLinearColor::Red, 3.f);
-            //}
-
             // 시작은 숨김 (WBP에서도 PanelRoot=접힘으로 해뒀다면 이 줄은 안전장치)
             MissionPanel->HidePanel();
-        }
-        else
-        {
-           // UKismetSystemLibrary::PrintString(this, TEXT("[SC] Panel create FAILED"), true, true, FLinearColor::Red, 3.f);
         }
     }
 
@@ -97,20 +92,6 @@ void AStageController::BeginPlay()
         }
     }
 
-    if (MM)
-    {
-      /*  UKismetSystemLibrary::PrintString(
-            this,
-            FString::Printf(TEXT("[SC] Found MissionManager: %s"), *GetNameSafe(MM)),
-            true, true, FLinearColor::Yellow, 2.f
-        );*/
-    }
-    else
-    {
-        //UKismetSystemLibrary::PrintString(this, TEXT("[SC] MissionManager NOT FOUND"), true, true, FLinearColor::Red, 3.f);
-        // 필요하면 여기서 스폰 로직 추가 가능 (지금은 레벨 배치 전제)
-    }
-
     // ----------------------------------------------------------------------------------------------
    // 4) (핵심) 액티브 미션이 비어 있으면, DT에서 랜덤 최대 5개 뽑아 초기화
     if (MM && MM->ActiveMissions.Num() == 0 && MM->MissionDataTable)
@@ -118,11 +99,6 @@ void AStageController::BeginPlay()
         TArray<FMissionData*> Rows;
         MM->MissionDataTable->GetAllRows<FMissionData>(TEXT("InitFromDT"), Rows);
 
-        /*UKismetSystemLibrary::PrintString(
-            this,
-            FString::Printf(TEXT("[SC] DT Rows = %d"), Rows.Num()),
-            true, true, FLinearColor::Blue, 2.f
-        );*/
 
         if (Rows.Num() > 0)
         {
@@ -211,6 +187,34 @@ void AStageController::BeginPlay()
 void AStageController::OnAllMissionsCompleted()
 {
     StageClear();
+}
+
+void AStageController::SpawnBossAtRandomPoint()
+{
+    if (!ChosenBossClass) return;
+    if (BossSpawnPoints.Num() == 0) return;
+
+    const int32 PIdx = FMath::RandRange(0, BossSpawnPoints.Num() - 1);
+    const AActor* SpawnPoint = BossSpawnPoints[PIdx];
+    if (!SpawnPoint) return;
+
+    FActorSpawnParameters Params;
+    CurrentBoss = GetWorld()->SpawnActor<ACHRBoss>(ChosenBossClass, SpawnPoint->GetActorLocation(), SpawnPoint->GetActorRotation(), Params);
+
+    if (CurrentBoss)
+    {
+        CurrentBoss->OnBossDied.AddDynamic(this, &AStageController::HandleBossDied);
+    }
+}
+
+void AStageController::HandleBossDied()
+{
+    // 딜레이 후 같은 보스 클래스로 재소환
+    FTimerHandle TH;
+    GetWorldTimerManager().SetTimer(TH, [this]()
+        {
+            SpawnBossAtRandomPoint();
+        }, RespawnDelay, false);
 }
 
 void AStageController::StageClear()
