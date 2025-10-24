@@ -1,0 +1,71 @@
+# Unreal Engine project ignores
+
+# Build folders
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+.vscode/
+.idea/
+
+# User-specific
+*.suo
+*.user
+*.userprefs
+*.sln.docstates
+*.opensdf
+*.VC.db
+*.VC.opendb
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and temporary
+*.log
+*.tlog
+*.tmp
+*.bak
+*.old
+
+# Compiled data
+*.exe
+*.dll
+*.lib
+*.pdb
+*.dmp
+*.app
+*.ipa
+*.a
+
+# Unreal-specific
+*.generated.*
+*.gen.cpp
+*.gen.h
+*.sdf
+*.sln.iml
+
+# Saved files
+Saved/Autosaves/
+Saved/Backup/
+Saved/Logs/
+Saved/Cooked/
+Saved/Config/WindowsEditor/EditorLayout.ini
+Saved/Config/CrashReportClient/
+
+# Engine related (if engine included)
+Engine/Intermediate/
+Engine/Saved/
+Engine/Binaries/
+Engine/DerivedDataCache/
+
+# Plugins intermediates
+Plugins/*/Intermediate/
+Plugins/*/Binaries/
+
+# Rider / CLion IDE
+.idea/
+cmake-build-*/
+*.dotCover

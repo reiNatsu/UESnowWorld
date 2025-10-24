@@ -48,6 +48,12 @@ void ACHRBoss::BeginPlay()
 void ACHRBoss::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	if (!BossAI)
+	{
+		BossAI = Cast<ACHRBossAIController>(GetController());
+	}
+
 	TickState(DeltaSeconds);
 }
 
@@ -350,3 +356,5 @@ void ACHRBoss::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiv
 		}
 	}
 }
+bool ACHRBoss::IsStunned() const { return bStunned; }
+bool ACHRBoss::HasValidTarget() const { return GetCurrentTarget() != nullptr; }

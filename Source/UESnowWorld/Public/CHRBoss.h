@@ -104,6 +104,10 @@ protected:
 
     float DamageMultiplier = 1.f;       // 버서크 시 배수
 
+    // 스턴 상태 여부
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Boss|State")
+    bool bStunned = false;
+
     UPROPERTY()
     ACHRBossAIController* BossAI = nullptr;
 
@@ -122,4 +126,8 @@ protected:
     UFUNCTION()
     void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
         UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+public:
+    bool IsStunned() const;
+    bool HasValidTarget() const;
 };
